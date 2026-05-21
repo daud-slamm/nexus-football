@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useAuth } from '../context/AuthContext';
@@ -90,7 +90,7 @@ export default function Chat() {
   const inputRef = useRef(null);
 
   const loadConversations = useCallback(async () => {
-    try { const { data } = await axios.get('/api/chat/conversations'); setConversations(data); } catch {}
+    try { const { data } = await api.get('/api/chat/conversations'); setConversations(data); } catch {}
   }, []);
 
   useEffect(() => { loadConversations(); }, [loadConversations]);
@@ -98,7 +98,7 @@ export default function Chat() {
 
   const loadHistory = async (convId) => {
     try {
-      const { data } = await axios.get(`/api/chat/history/${convId}`);
+      const { data } = await api.get(`/api/chat/history/${convId}`);
       setMessages(data); setActiveConvId(convId); setError('');
     } catch {}
   };
@@ -112,7 +112,7 @@ export default function Chat() {
     setMessages(prev => [...prev, { role: 'user', content }]);
     setSending(true);
     try {
-      const { data } = await axios.post('/api/chat/message', { message: content, conversationId: activeConvId });
+      const { data } = await api.post('/api/chat/message', { message: content, conversationId: activeConvId });
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
       setActiveConvId(data.conversationId);
       loadConversations();
@@ -127,7 +127,7 @@ export default function Chat() {
 
   const deleteConversation = async (convId, e) => {
     e.stopPropagation();
-    await axios.delete(`/api/chat/conversation/${convId}`);
+    await api.delete(`/api/chat/conversation/${convId}`);
     if (activeConvId === convId) newChat();
     loadConversations();
   };

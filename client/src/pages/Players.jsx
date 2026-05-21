@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { useAuth } from '../context/AuthContext';
 
 const QUICK_PLAYERS = ['Lionel Messi','Cristiano Ronaldo','Mbappé','Vinicius Jr','Erling Haaland','Pedri','Bellingham','Neymar','Lewandowski','Modric'];
@@ -131,7 +131,7 @@ export default function Players() {
     if (!name.trim()) return;
     setSearchQuery(name); setSearchLoading(true); setSearchError(''); setSearchResult(null);
     try {
-      const { data } = await axios.post('/api/player/search', { name });
+      const { data } = await api.post('/api/player/search', { name });
       if (data.error) setSearchError(data.error);
       else setSearchResult(data);
     } catch { setSearchError('Error al buscar el jugador.'); }
@@ -142,7 +142,7 @@ export default function Players() {
     if (!a.trim()||!b.trim()) return;
     setP1(a); setP2(b); setCompareLoading(true); setCompareError(''); setCompareResult(null);
     try {
-      const { data } = await axios.post('/api/player/compare', { player1:a, player2:b });
+      const { data } = await api.post('/api/player/compare', { player1:a, player2:b });
       if (data.error) setCompareError(data.error);
       else setCompareResult(data);
     } catch { setCompareError('Error al comparar jugadores.'); }

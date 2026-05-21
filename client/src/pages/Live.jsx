@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { useAuth } from '../context/AuthContext';
 
 const COMPETITIONS = [
@@ -173,7 +173,7 @@ export default function Live() {
     setLoading(true); setError(''); setData(null);
     try {
       const endpoint = tab==='results' ? 'results' : tab==='standings' ? 'standings' : tab==='scorers' ? 'scorers' : 'matches';
-      const { data: res } = await axios.get(`/api/football/${endpoint}/${comp}`);
+      const { data: res } = await api.get(`/api/football/${endpoint}/${comp}`);
       setData(res);
     } catch(err) {
       setError(err.response?.data?.error || 'Error al cargar. Inténtalo de nuevo.');

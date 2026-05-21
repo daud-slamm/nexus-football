@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { useAuth } from '../context/AuthContext';
 
 export default function Register() {
@@ -16,7 +16,7 @@ export default function Register() {
     if (form.password !== form.confirm) return setError('Las contraseñas no coinciden');
     setLoading(true);
     try {
-      const { data } = await axios.post('/api/auth/register', {
+      const { data } = await api.post('/api/auth/register', {
         username: form.username,
         email: form.email,
         password: form.password,
