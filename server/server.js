@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 const footballRoutes = require('./routes/football');
 const playerRoutes  = require('./routes/player');
+const adminRoutes   = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -34,6 +35,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/football', footballRoutes);
 app.use('/api/player',   playerRoutes);
+app.use('/api/admin',    adminRoutes);
 
 app.get('/api/health', (_, res) => res.json({ status: 'ok' }));
 

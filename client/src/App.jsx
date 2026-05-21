@@ -7,6 +7,7 @@ import Records from './pages/Records';
 import Live from './pages/Live';
 import Players from './pages/Players';
 import Verify from './pages/Verify';
+import Admin from './pages/Admin';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/records" element={<ProtectedRoute><Records /></ProtectedRoute>} />
           <Route path="/live" element={<ProtectedRoute><Live /></ProtectedRoute>} />
           <Route path="/players" element={<ProtectedRoute><Players /></ProtectedRoute>} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<Navigate to="/chat" replace />} />
         </Routes>
       </BrowserRouter>
