@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment variables — NO subir al repo
+server/.env
+
+# Database files — datos privados de usuarios
+server/*.db
+
+# Build
+client/dist/
+client/.vite/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
