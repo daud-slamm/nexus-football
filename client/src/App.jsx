@@ -6,6 +6,7 @@ import Chat from './pages/Chat';
 import Records from './pages/Records';
 import Live from './pages/Live';
 import Players from './pages/Players';
+import Verify from './pages/Verify';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/" element={<Navigate to="/chat" replace />} />
           <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+          <Route path="/verify" element={<Verify />} />
           <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
           <Route path="/records" element={<ProtectedRoute><Records /></ProtectedRoute>} />
           <Route path="/live" element={<ProtectedRoute><Live /></ProtectedRoute>} />
