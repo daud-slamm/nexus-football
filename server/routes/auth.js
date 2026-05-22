@@ -34,12 +34,10 @@ router.post('/register', async (req, res) => {
       created_at: new Date().toISOString(),
     });
 
-    // Send verification email (don't block response if it fails)
-    try {
-      await sendVerificationEmail(email, username, verificationToken);
-    } catch (mailErr) {
-      console.error('Error sending verification email:', mailErr.message);
-    }
+    // Fire and forget — don't block the response waiting for email
+    sendVerificationEmail(email, username, verificationToken)
+      .then(() => console.log('Verification email sent to', email))
+      .catch(err => console.error('Error sending verification email:', err.message));
 
     res.status(201).json({ message: 'Cuenta creada. Revisa tu email para verificarla.' });
   } catch (err) {
