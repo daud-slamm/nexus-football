@@ -121,4 +121,3 @@ nexus-football/
 
 ---
 
-Desarrollado con ❤️ por **Daud**
