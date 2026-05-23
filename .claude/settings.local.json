@@ -1,12 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(New-Item -ItemType Directory -Force -Path \"C:\\\\Users\\\\mdaud\\\\Documents\\\\ProyectoLLMDAUD\\\\server\\\\routes\")",
-      "PowerShell(New-Item -ItemType Directory -Force -Path \"C:\\\\Users\\\\mdaud\\\\Documents\\\\ProyectoLLMDAUD\\\\server\\\\middleware\")",
-      "PowerShell(New-Item -ItemType Directory -Force -Path \"C:\\\\Users\\\\mdaud\\\\Documents\\\\ProyectoLLMDAUD\\\\client\\\\src\\\\pages\")",
-      "PowerShell(New-Item -ItemType Directory -Force -Path \"C:\\\\Users\\\\mdaud\\\\Documents\\\\ProyectoLLMDAUD\\\\client\\\\src\\\\components\")",
-      "PowerShell(New-Item -ItemType Directory -Force -Path \"C:\\\\Users\\\\mdaud\\\\Documents\\\\ProyectoLLMDAUD\\\\client\\\\src\\\\context\")",
-      "PowerShell(\\(Get-Content \"C:\\\\Users\\\\mdaud\\\\Documents\\\\ProyectoLLMDAUD\\\\client\\\\index.html\"\\) -replace 'NEXUS — Tu IA del futuro', 'NEXUS FOOTBALL — Tu IA del Fútbol' | Set-Content \"C:\\\\Users\\\\mdaud\\\\Documents\\\\ProyectoLLMDAUD\\\\client\\\\index.html\" -Encoding utf8)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   }
 }
