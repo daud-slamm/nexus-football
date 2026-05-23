@@ -24,22 +24,16 @@ router.post('/register', async (req, res) => {
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
-    await users.insert({
+    const user = await users.insert({
       username,
       email,
       password: hashed,
-      verified: false,
-      verificationToken,
-      verificationExpires,
+      verified: true,
       created_at: new Date().toISOString(),
     });
 
-    // Fire and forget — don't block the response waiting for email
-    sendVerificationEmail(email, username, verificationToken)
-      .then(() => console.log('Verification email sent to', email))
-      .catch(err => console.error('Error sending verification email:', err.message));
-
-    res.status(201).json({ message: 'Cuenta creada. Revisa tu email para verificarla.' });
+    const token = jwt.sign({ id: user._id, username }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    res.status(201).json({ token, user: { id: user._id, username, email } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error interno del servidor' });
@@ -111,14 +105,6 @@ router.post('/login', async (req, res) => {
 
   const match = await bcrypt.compare(password, user.password);
   if (!match) return res.status(401).json({ error: 'Credenciales incorrectas' });
-
-  if (!user.verified) {
-    return res.status(403).json({
-      error: 'Debes verificar tu email antes de entrar',
-      notVerified: true,
-      email: user.email,
-    });
-  }
 
   const token = jwt.sign(
     { id: user._id, username: user.username },

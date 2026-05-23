@@ -7,7 +7,6 @@ export default function Register() {
   const [form, setForm] = useState({ username: '', email: '', password: '', confirm: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -17,12 +16,13 @@ export default function Register() {
     if (form.password !== form.confirm) return setError('Las contraseñas no coinciden');
     setLoading(true);
     try {
-      await api.post('/api/auth/register', {
+      const { data } = await api.post('/api/auth/register', {
         username: form.username,
         email: form.email,
         password: form.password,
       });
-      setSent(true);
+      login(data.token, data.user);
+      navigate('/chat');
     } catch (err) {
       setError(err.response?.data?.error || 'Error al registrarse');
     } finally {

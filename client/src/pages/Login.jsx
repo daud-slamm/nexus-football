@@ -1,52 +1,27 @@
 import { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const [notVerified, setNotVerified] = useState(false);
-  const [resendLoading, setResendLoading] = useState(false);
-  const [resendMsg, setResendMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const justVerified = searchParams.get('verified') === 'true';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setNotVerified(false);
     setLoading(true);
     try {
       const { data } = await api.post('/api/auth/login', form);
       login(data.token, data.user);
       navigate('/chat');
     } catch (err) {
-      const data = err.response?.data;
-      if (data?.notVerified) {
-        setNotVerified(true);
-        setError(data.error);
-      } else {
-        setError(data?.error || 'Error al iniciar sesión');
-      }
+      setError(err.response?.data?.error || 'Error al iniciar sesión');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleResend = async () => {
-    setResendLoading(true);
-    setResendMsg('');
-    try {
-      await api.post('/api/auth/resend-verification', { email: form.email });
-      setResendMsg('✅ Email reenviado, revisa tu bandeja de entrada');
-    } catch (err) {
-      setResendMsg(err.response?.data?.error || 'Error al reenviar');
-    } finally {
-      setResendLoading(false);
     }
   };
 
@@ -114,36 +89,12 @@ export default function Login() {
               <p className="text-gray-500 text-sm">Inicia sesión para continuar</p>
             </div>
 
-            {justVerified && (
-              <div className="flex items-center gap-2.5 bg-green-500/10 border border-green-500/25 text-green-400 rounded-xl px-4 py-3 mb-5 text-sm animate-fade-in">
-                <span>✅</span>
-                ¡Email verificado! Ya puedes iniciar sesión.
-              </div>
-            )}
-
             {error && (
-              <div className="bg-red-500/10 border border-red-500/25 text-red-400 rounded-xl px-4 py-3 mb-5 text-sm animate-fade-in">
-                <div className="flex items-center gap-2.5">
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                  </svg>
-                  {error}
-                </div>
-                {notVerified && (
-                  <div className="mt-3 pt-3 border-t border-red-500/20">
-                    {resendMsg ? (
-                      <p className="text-xs text-green-400">{resendMsg}</p>
-                    ) : (
-                      <button
-                        onClick={handleResend}
-                        disabled={resendLoading}
-                        className="text-xs text-red-300 hover:text-white underline underline-offset-2 transition-colors"
-                      >
-                        {resendLoading ? 'Enviando...' : '¿No recibiste el email? Reenviar verificación →'}
-                      </button>
-                    )}
-                  </div>
-                )}
+              <div className="flex items-center gap-2.5 bg-red-500/10 border border-red-500/25 text-red-400 rounded-xl px-4 py-3 mb-5 text-sm animate-fade-in">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                {error}
               </div>
             )}
 
